@@ -6,6 +6,11 @@ import Button from 'react-bootstrap/Button';
 
 
 export default function CityList () {
+
+const [show, setShow] = useState(false);
+
+const ViewItem = () => setShow(false);
+const DelateItem = () => setShow(true);
     return (
         <ListGroup>
             <ListGroup.Item>
