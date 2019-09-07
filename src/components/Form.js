@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import {connect} from 'react-redux';
+import { Provider } from "react-redux";
 
 
-export default function FormModal() {
+function FormModal(props) {
 
 	console.log('init');
     let arr= [];
@@ -15,7 +17,12 @@ export default function FormModal() {
     function addItem(name){
         arr.push(name);
         localStorage.setItem('list', arr);
+        props.dispatch({
+          type: 'ADD_WEATHER',
+          payload: name
+        })
     }
+    
     function submitFrom(){
     	addItem(name);
     }
@@ -40,7 +47,7 @@ export default function FormModal() {
 					<Form onSubmit={submitFrom}>
 						<Form.Group controlId="formBasicEmail">
 						    <Form.Label>City</Form.Label>
-					    	<Form.Control type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Enter city" />
+					    	<Form.Control type="text" required value={name} onChange={e => setName(e.target.value)} placeholder="Enter city" />
 						</Form.Group>
 						<Button variant="success" type="submit">
 						    Add
@@ -51,3 +58,4 @@ export default function FormModal() {
     	</>
   	);
 }
+export default connect( state=> state)(FormModal);

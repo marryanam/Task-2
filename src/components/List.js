@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
+import { createStore, combineReducers, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {connect} from 'react-redux';
 
-
-
-export default function CityList () {
+ function CityList (props) {
 
     console.log('init');
     let arr= [];
     if(localStorage.getItem('list')){
        arr = localStorage.getItem('list').split(',');
     }
-    // console.log(arr);
 
     function addItem(name){
         arr.push(name);
@@ -20,12 +20,12 @@ export default function CityList () {
     }
 
     function fetchFrom(e){
-        console.log(e.target.dataset.city);
+        console.log(props);
         api(e.target.dataset.city);
     }
+
+    const [name, setName] = useState("");
     function DelateItem(e){
-        console.log(e.target.dataset.city);
-        // arr.remove(e.target.dataset.city);
         arr.forEach(function(item, index, object) {
           if (item === e.target.dataset.city) {
             object.splice(index, 1);
@@ -33,8 +33,9 @@ export default function CityList () {
           }
         });
         localStorage.setItem('list', arr);
-        console.log(arr);
+        setName(e.target.dataset.city);
     }
+
     function api(name){
         fetch('http://api.openweathermap.org/data/2.5/weather?q='+name+'&appid=b1b35bba8b434a28a0be2a3e1071ae5b&units=imperial')
           .then(
@@ -46,6 +47,8 @@ export default function CityList () {
               }
               response.json().then(function(data) {
                 console.log(data);
+                const { testWeather } = props;
+                    testWeather(data);
               });
             }
           )
@@ -53,6 +56,7 @@ export default function CityList () {
             console.log('Fetch Error :-S', err);
           });
     }
+
     function createListItems(){
         console.log(arr);
         arr.map(x => {
@@ -67,12 +71,10 @@ export default function CityList () {
             )
         });
     }
-    useEffect(() => {
-      // createListItems();
-       console.log('ddddddrrrrr');
-    })
 
     return (
+      <div>
+        <h3>Aviable cities:</h3>
         <ListGroup>
             {arr.map(x => {
             return(
@@ -86,5 +88,26 @@ export default function CityList () {
             )
         })}
         </ListGroup>
+      </div>
     );
 }
+React.memo(CityList);
+
+const mapStateToProps = state => {
+  return {
+    test33Weather : state.weather
+  }
+}
+
+const mapDispatchToProps = function(dispatch, ownProps) {
+  return {
+    testWeather: function(data) {
+      dispatch({type: "ADD_WEATHER", payload: data});
+    }
+  }
+}
+ 
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CityList)

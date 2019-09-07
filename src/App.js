@@ -5,7 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import CityList from './components/List';
-import WeatherCard from './components/Card';
+import CardWrapper from './components/CardWrapper';
+import CurrentWeather from './components/Current';
 import FormModal from './components/Form';
 import './style.css';
 
@@ -21,10 +22,11 @@ export default function App() {
             <main>
                 <Container>
                   <Row>
-                        <Col>
-                            <WeatherCard/>
+                        <Col style={{ maxWidth: '50%' }}>
+                            <CurrentWeather/>
+                            <CardWrapper/>
                         </Col>
-                        <Col>
+                        <Col style={{ maxWidth: '50%' }}>
                             <CityList/>            
                             <FormModal/>
                         </Col>

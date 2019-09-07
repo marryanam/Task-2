@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
+import { createStore, combineReducers, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {connect} from 'react-redux';
 
 
-export default function WeatherCard() {
+export default function WeatherCard(props) {
+
 	return (
-		<Card style={{ width: '100%' }}>
-			<Card.Img variant="top" src="./img/logo.svg" />
-			 <Card.Body>
-			    <Card.Title>City name</Card.Title>
-			    <Card.Text>
-			      	Please sign up and use our fast and easy-to-work weather APIs for free. Look at our monthly subscriptions for more options than Free account can provide you. Read How to start first and enjoy using our powerful weather APIs.
-			    </Card.Text>
-			</Card.Body>
-		</Card>
+		<div>
+        	<h3>Details:</h3>
+			<Card style={{ width: '100%' }}>
+				 <Card.Body>
+				    <Card.Title>{props.list.name}</Card.Title>
+				    <Card.Text>
+				      	{JSON.stringify(props.list)}
+				    </Card.Text>
+				</Card.Body>
+			</Card>
+		</div>
 	)
 }
+
